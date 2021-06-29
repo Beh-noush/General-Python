@@ -1,3 +1,6 @@
+from IPython.display import clear_output
+
+
 def playboard(play_list):
   a_1,a_2,a_3,a_4,a_5,a_6,a_7,a_8,a_9 = play_list
   print( f'|__{a_1}__|__{a_2}__|__{a_3}__|\n|__{a_4}__|__{a_5}__|__{a_6}__|\n|__{a_7}__|__{a_8}__|__{a_9}__|' )
@@ -89,3 +92,4 @@ while game_on:
   if game_off:
     break
 print("Game is over!" )
+
