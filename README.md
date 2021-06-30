@@ -1,1 +1,1 @@
-# tic-tac-toe
+# General Python
