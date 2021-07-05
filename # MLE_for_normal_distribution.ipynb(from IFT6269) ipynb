@@ -1,0 +1,546 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "hw1_Behnoush_Khavari.pynb.ipynb",
+      "provenance": [],
+      "collapsed_sections": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Beh-noush/General-Python/blob/main/%23%20MLE_for_normal_distribution.ipynb(from%20IFT6269)%20ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Z8p_rVKVWH2w"
+      },
+      "source": [
+        "# MLE_for_normal_distribution.ipynb(from IFT6269) "
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "SloWv9XFBdxL"
+      },
+      "source": [
+        "We are going to numerically explore the MLE of the variance parameter of the Gaussian."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "WlK2DyIsTCEk"
+      },
+      "source": [
+        "import numpy as np\n",
+        "import matplotlib.pyplot as plt"
+      ],
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "UbbWroVpRo-R"
+      },
+      "source": [
+        "def sample_gaussian_data(num_samples, num_trials):\n",
+        "  \"\"\"\n",
+        "  inputs: \n",
+        "     num_samples: [int] number of samples to generate for each trial\n",
+        "     num_trials: [int] number of trials\n",
+        "  Returns:\n",
+        "     samples: [num_samples,num_trial] Array of generated samples.\n",
+        "  \"\"\"\n",
+        "  return np.random.randn(num_samples, num_trials)"
+      ],
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "RfzZh9OwTy8g"
+      },
+      "source": [
+        "def mu_sigma2_mle(samples):\n",
+        "    \"\"\"\n",
+        "    # TODO \n",
+        "    Compute Gaussian MLE estimators for the mean and variance \n",
+        "        Inputs:\n",
+        "             samples: [num_samples, num_trials] Matrix of N(0, 1) iid samples. \n",
+        "                      It contains num_trials sets, each of these sets containing\n",
+        "                      num_samples samples.\n",
+        "        \n",
+        "        Returns:\n",
+        "             mu_hat: [num_trials] Vector of MLE mean estimators for each trial\n",
+        "             sigma2_hat: [num_trials] Vector of MLE variance estimators for each trial\n",
+        "             \n",
+        "    \"\"\"\n",
+        "    mean = np.mean(samples , axis = 0)\n",
+        "    var = np.mean( (samples - mean)**2, axis = 0 ) #It is equivalent to using np.var(samples , axis = 0)\n",
+        "    return mean , var "
+      ],
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "KJnRhEaWc2OW",
+        "outputId": "69755101-ff41-4709-b6ea-737329b543bd",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "source": [
+        "samp = sample_gaussian_data(10,3)\n",
+        "mu_sigma2_mle(samp)"
+      ],
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "(array([-0.13836067,  0.44849168, -0.29944406]),\n",
+              " array([0.50100184, 0.27039961, 1.34849992]))"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 6
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Coe0Hmwrc8Js",
+        "outputId": "2f22ad30-ed2b-41c9-c62b-2d0e1de54cc8",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "source": [
+        "np.var(samp, axis = 0)"
+      ],
+      "execution_count": 8,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([0.50100184, 0.27039961, 1.34849992])"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 8
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Ur_MyJhzXSWq"
+      },
+      "source": [
+        "def freq_mean_var(x):\n",
+        "    \"\"\"\n",
+        "    Compute the frequentist mean and variance of a vector of n real numbers \n",
+        "        Inputs:\n",
+        "             x: [n] Vector of real numbers\n",
+        "        \n",
+        "        Returns:\n",
+        "             (mean, var): [tuple] Frequentist mean and variance of x\n",
+        "             \n",
+        "    \"\"\"\n",
+        "    mean = np.mean(x)\n",
+        "    var = np.mean((x - mean)**2) #Equivalent to np.var(x)\n",
+        "    return (mean , var)\n"
+      ],
+      "execution_count": 9,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "E3F37UWIdhWT",
+        "outputId": "d612a9e0-a952-4f9d-a320-2855cbe71ead",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "source": [
+        "freq_mean_var(samp[:,1])"
+      ],
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "(0.4484916766760138, 0.27039960644684347)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 10
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "FN3vX3vwd2dQ",
+        "outputId": "5057c9f8-2f26-4913-d02f-091f1477260d",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "source": [
+        "np.var(samp[:,1])"
+      ],
+      "execution_count": 11,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.27039960644684347"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 11
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-2Bqj64ZTy3X"
+      },
+      "source": [
+        "def empirical_frequentist_bias(empirical_mean, true_mean):\n",
+        "    \"\"\"\n",
+        "    # TODO \n",
+        "    Estimate the frequentist bias of an estimator given its empirical and true means \n",
+        "        Inputs:\n",
+        "             true_mean: [float] True mean of the estimator\n",
+        "             empirical_mean: [float] Empirical mean of the estimator\n",
+        "             \n",
+        "        Returns:\n",
+        "             bias: [float] Frequentist bias\n",
+        "            \n",
+        "    \"\"\"\n",
+        "    return true_mean - empirical_mean\n"
+      ],
+      "execution_count": 12,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "QLChG0awZMOd"
+      },
+      "source": [
+        "def plot_sigma_hat_histogram(samples, bins=200):\n",
+        "    \"\"\"\n",
+        "    Plots a histogram of estimated variances \n",
+        "        Inputs:\n",
+        "            samples: [array] Estimated variances to be plotted\n",
+        "\n",
+        "    \"\"\"\n",
+        "    plt.xlabel('variance')\n",
+        "    plt.ylabel('counts')\n",
+        "    plt.hist(samples, bins )"
+      ],
+      "execution_count": 13,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Yn6zTvnxeae-",
+        "outputId": "c40df893-6d48-44ae-bede-3e8631b5b238"
+      },
+      "source": [
+        "#draw  𝑛=5  samples from the standard Gaussian distribution,  N(0,1) .\n",
+        "samples = sample_gaussian_data(5,1)\n",
+        "print(f'Generated Gaussian samples\\n{samples}')"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Generated Gaussian samples\n",
+            "[[-1.18890842]\n",
+            " [ 0.62134348]\n",
+            " [ 0.42917227]\n",
+            " [-0.98416142]\n",
+            " [ 0.2704691 ]]\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ohE-Le__ZMoz",
+        "outputId": "e7e38f4e-d3b9-46d8-b347-02092cd06437"
+      },
+      "source": [
+        "#Compute the ML estimate  𝜇̂  for the mean and  𝜎̂2  for the variance of the Gaussian, as given in Question 3(d).\n",
+        "mean , variance = mu_sigma2_mle(samples)\n",
+        "print(f'MLE of mean is {mean}\\nMLE of variance is {variance}') "
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "MLE of mean is [-0.170417]\n",
+            "MLE of variance is [0.57605545]\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 277
+        },
+        "id": "EjstCJ0dsheK",
+        "outputId": "6d2f6396-79fa-49e2-d4ab-e13b1245262b"
+      },
+      "source": [
+        "#Repeat the previous steps 10,000 times. Plot a histogram of the 10,000 estimates of the Gaussian variance parameter to show its empirical distribution.\n",
+        "samples  =  sample_gaussian_data(num_samples = 5 , num_trials = 10000)\n",
+        "mean , var = mu_sigma2_mle(samples)\n",
+        "plot_sigma_hat_histogram(var, bins = 200)"
+      ],
+      "execution_count": 17,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "image/png": "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\n",
+            "text/plain": [
+              "<Figure size 432x288 with 1 Axes>"
+            ]
+          },
+          "metadata": {
+            "tags": [],
+            "needs_background": "light"
+          }
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "YUiBh13Wpt0q"
+      },
+      "source": [
+        "We notice that the shape of this histogram shows the Chi-square distribution as we expected for the sum of squares of standard normal variables.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "1QZYzYg5x-yj",
+        "outputId": "b2383764-0564-4050-d594-3b86308952e1"
+      },
+      "source": [
+        "_, sigma2_hat_vec = mu_sigma2_mle(samples)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.19962312114292557"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 13
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "aYtO-I5syDou",
+        "outputId": "9eb7b65b-2b72-455d-c10b-f7e4d169b8ad"
+      },
+      "source": [
+        "var_of_gaussian_variance = np.mean((var - np.mean(var))**2)\n",
+        "var_of_gaussian_variance "
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.31670181055821495"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 12
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "77ECHpslSoDO"
+      },
+      "source": [
+        "\n",
+        " Let $X_{1},\\dots,X_{n} \\stackrel{\\text{iid}}{\\sim} \\mathcal{N}(\\mu,\\sigma^2)$ (where $\\mu \\in \\mathbb{R}$) for $n\\geq2$ to simplify. Let $\\bar{X} := \\frac{1}{n} \\sum_{i=1}^n X_i$. We can show that the MLE for $\\theta := (\\mu,\\sigma^2)$ is  $\\hat{\\mu} = \\bar{X}$ and $\\hat{\\sigma}^2 := \\frac{1}{n} \\sum_{i=1}^n (X_i - \\bar{X})^2$. Here, we want to derive the bias, variance and consistency  only for $\\hat{\\sigma}^2$.\n",
+        "\n",
+        "\n",
+        " When calculating the variance of $\\hat{\\sigma}^2$, we use the fact that $\\frac{1}{\\sigma^2} \\sum_{i=1}^n (X_i - \\bar{X})^2 \\stackrel{\\text{d}}{=} \\chi_{n-1}^2$, where $\\chi_{n-1}^2$ be the chi-squared distribution with $(n-1)$ degrees of freedom. Also, for chi-squared distribution, we have $\\text{Var} [\\chi_{n-1}^2] = 2(n-1)$."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "SohbrCgAVev2"
+      },
+      "source": [
+        "Next, we find the expectation of $\\hat{\\sigma^2}$ to see if it is biased.\n",
+        "$$\n",
+        " \\mathbb{E}[ \\hat{\\sigma^2}] = \\frac{\\sum_{i=1}^n\\mathbb{E}[(X_i-\\bar X)^2] }n = \\frac1n \\sigma^2 \\mathbb{E}[\\sum_{i=1}^n (\\frac{X_i-\\bar X}{\\sigma})^2]\n",
+        "$$\n",
+        "We notice that if $X_i$ have normal distribution with variance $\\sigma^2$, the new variables $\\frac{X_i-\\bar X}{\\sigma}$ have standard distribution and therefore the sum of their squared values has Chi-distribution $\\chi_{n-1}$. The expectation value of Chi-distribution is $(n-1)$ which means the mean of \n",
+        "$$\\mathbb E[ \\hat{\\sigma^2}]  = \\frac1n \\sigma^2\\mathbb E[\\sum_{i=1}^n (\\frac{X_i-\\bar X}{\\sigma})^2] = \\frac1n \\sigma^2(n-1) =  \\sigma^2(1-\\frac1n) =\\sigma^2-\\frac{\\sigma^2}n$$\n",
+        "Therefore, the estimator of variance is biased and its bias is equal to \n",
+        "$$\n",
+        "bias(\\hat{\\sigma^2}) = \\sigma^2  - \\mathbb E[\\hat{\\sigma^2}] = \\frac{\\sigma^2}n \\neq 0 \\,\\,\\to \\hat{\\sigma^2}\\text{ is biased}\n",
+        "$$"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "2JJUaagXZd4_"
+      },
+      "source": [
+        "Finally its variance is\n",
+        "$$Var[ \\hat{\\sigma^2}] = Var[\\frac{\\sum_{i=1}^n (X_i-\\bar X)^2 }n] = Var[\\sigma^2\\frac{\\sum_{i=1}^n (\\frac{X_i-\\bar X}{\\sigma})^2 }n] \n",
+        "=\\frac{\\sigma^4}{n^2} Var[\\sum_{i=1}^n (\\frac{X_i-\\bar X}{\\sigma})^2  ]$$\n",
+        "\n",
+        "With the same line of argument as for the case of the expectation value of $\\hat{\\sigma^2}$, we use the properties of the Chi-square distribution which has $2(n-1)$ as the variance for $\\chi_{n-1}$. Therefore, the above value of variance becomes\n",
+        "$$Var[ \\hat{\\sigma^2}] = Var[\\frac{\\sum_{i=1}^n (X_i-\\bar X)^2 }n] =\\frac{\\sigma^4}{n^2} (2(n-1))  =\\frac{2(n-1)}{n^2}  \\sigma^4 \n",
+        "$$"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "3AGX5PAcik7k"
+      },
+      "source": [
+        "We can compare these theoretical results for the bias and variance of the estimator $\\hat\\sigma^2$ with the theoretical result:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "vGtfm6nnrpqd",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "f5f695d7-fd1c-49e0-ba8e-a70999e0192b"
+      },
+      "source": [
+        "NUM_SAMPLES = 5\n",
+        "bias_of_gaussian_variance = np.mean(var) - 1\n",
+        "\n",
+        "# Use the same 10,000 repeated trials to numerically estimate the (frequentist) bias and variance of the ML estimate  𝜎̂2  of the Gaussian variance parameter.\n",
+        "# Compare the results with the theoretical (frequentist) bias and variance that you can compute above.\n",
+        "sigma2_hat_mean, sigma2_hat_var = freq_mean_var(var)\n",
+        "\n",
+        "TRUE_SIGMA2 = 1.\n",
+        "\n",
+        "# The theoretical bias and variance of $\\hat{\\sigma}^2$\n",
+        "n = NUM_SAMPLES\n",
+        "THEO_BIAS = TRUE_SIGMA2/n\n",
+        "THEO_VAR =  TRUE_SIGMA2**2*(2*n -2)/(n**2)\n",
+        "\n",
+        "emp_bias = empirical_frequentist_bias(empirical_mean=sigma2_hat_mean,\n",
+        "                                      true_mean=TRUE_SIGMA2)\n",
+        "\n",
+        "print('Theoretical Bias: ', THEO_BIAS, ' Freq. Estimated Bias: ', emp_bias)\n",
+        "print('Theoretical Variance: ', THEO_VAR, ' Freq. Estimated Variance: ', sigma2_hat_var)"
+      ],
+      "execution_count": 20,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Theoretical Bias:  0.2  Freq. Estimated Bias:  0.20402697452170704\n",
+            "Theoretical Variance:  0.32  Freq. Estimated Variance:  0.3112150654280202\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "CLfeBM2bNH5a"
+      },
+      "source": [
+        "Conclusions drawn from this experiment:\n",
+        "The numerical result is pretty close to the theoretical one for the num_trials as large as 10000. "
+      ]
+    }
+  ]
+}
